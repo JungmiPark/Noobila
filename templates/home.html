@@ -16,74 +16,81 @@
 			    height : "600px", // 지도의 높이
                 zoom : 15
 		    
-                //addMarkersTooMuch();
+                
             });
-	    
-            var positions = [//다중 마커 저장 배열
-			{
- 				title: '창원역', 
- 				lonlat: new Tmapv2.LatLng(35.25728935382537,128.60714256763458)//좌표 지정
- 			},
- 			{
- 				title: '의창구청', 
- 				lonlat: new Tmapv2.LatLng(35.253822182972065,128.63995671272278)
- 			},
- 			{
- 				title: '창원병원', 
- 				lonlat: new Tmapv2.LatLng(35.21752736106238,128.6712098121643)
- 			},
- 			{
- 				title: '롯데백화점',
- 				lonlat: new Tmapv2.LatLng(35.22427184170951,128.68097305297851)
- 			},
- 			{
-	     		title: '상남도서관',
-	     		lonlat: new Tmapv2.LatLng(35.2141833983877,128.69521021842956)
-	     	}
-		];
+
+			addMarkers(terminal, map);
+        //     var positions = [//다중 마커 저장 배열
+		// 	{
+ 		// 		title: '창원역', 
+ 		// 		lonlat: new Tmapv2.LatLng(35.25728935382537,128.60714256763458)//좌표 지정
+ 		// 	},
+ 		// 	{
+ 		// 		title: '의창구청', 
+ 		// 		lonlat: new Tmapv2.LatLng(35.253822182972065,128.63995671272278)
+ 		// 	},
+ 		// 	{
+ 		// 		title: '창원병원', 
+ 		// 		lonlat: new Tmapv2.LatLng(35.21752736106238,128.6712098121643)
+ 		// 	},
+ 		// 	{
+ 		// 		title: '롯데백화점',
+ 		// 		lonlat: new Tmapv2.LatLng(35.22427184170951,128.68097305297851)
+ 		// 	},
+ 		// 	{
+	    //  		title: '상남도서관',
+	    //  		lonlat: new Tmapv2.LatLng(35.2141833983877,128.69521021842956)
+	    //  	}
+		// ];
 		 
-		for (var i = 0; i< positions.length; i++){//for문을 통하여 배열 안에 있는 값을 마커 생성
-			var lonlat = positions[i].lonlat;
-			var title = positions[i].title;
-			//Marker 객체 생성.
-			marker = new Tmapv2.Marker({
-				position : lonlat, //Marker의 중심좌표 설정.
-				map : map, //Marker가 표시될 Map 설정.
-				title : title //Marker 타이틀.
-			});
-		}
+		// for (var i = 0; i< positions.length; i++){//for문을 통하여 배열 안에 있는 값을 마커 생성
+		// 	var lonlat = positions[i].lonlat;
+		// 	var title = positions[i].title;
+		// 	//Marker 객체 생성.
+		// 	marker = new Tmapv2.Marker({
+		// 		position : lonlat, //Marker의 중심좌표 설정.
+		// 		map : map, //Marker가 표시될 Map 설정.
+		// 		title : title //Marker 타이틀.
+		// 	});
+		// }
 		
 	}
-    // // 마커들을 저장할 배열입니다.
-	// var markers = [];
+    // 마커들을 저장할 배열입니다.
+	var markers = [];
+	var terminal = {{terminalinfo|tojson}};
+	// console.log(terminal);
 	
-	// // 100개의 마커를 추가하는 함수입니다.
-	// function addMarkersTooMuch() {
-    //     removeMarkers();
-    //     for (var i = 0; i < 100; i++) {
-    //         var lat = Math.random() / 100;
-    //         var lng = Math.random() / 100;
-    //         //Marker 객체 생성.
-    //         var marker = new Tmapv2.Marker({
-    //             position: new Tmapv2.LatLng(37.563680 + lat, 126.976433 + lng), //Marker의 중심좌표 설정.
-    //             label: 'test' //Marker의 라벨.
-    //         });
-    //         marker.setMap(map); //Marker가 표시될 Map 설정.
-    //         markers.push(marker);
-    //     }
-    // }
+	// 100개의 마커를 추가하는 함수입니다.
+	function addMarkers(terminal, map) {
+        removeMarkers();
+        for (var i = 0; i < terminal.length; i++) {
+            var lat = terminal[i]['Latitude'];
+			// console.log(lat);
+            var lng = terminal[i]['Longitude'];
+            //Marker 객체 생성.
+            var marker = new Tmapv2.Marker({
+                position: new Tmapv2.LatLng(lat, lng),//Marker의 중심좌표 설정.
+				// map: map, 
+                label: terminal[i]['Tmname'] //Marker의 라벨.
+            });
+            marker.setMap(map); //Marker가 표시될 Map 설정.
+            markers.push(marker);
+        }
+    }
 	 
-	// // 모든 마커를 제거하는 함수입니다.
-	// function removeMarkers() {
-	// 	for (var i = 0; i < markers.length; i++) {
-	// 		markers[i].setMap(null);
-	// 	}
-	// 	markers = [];
-	// }   
+	// 모든 마커를 제거하는 함수입니다.
+	function removeMarkers() {
+		for (var i = 0; i < markers.length; i++) {
+			markers[i].setMap(null);
+		}
+		markers = [];
+	}   
     </script>
 </head>
 <body onload="initTmap()">
     <h1>누비라 홈!</h1>
     <div id="map_div"></div>
+	<div>{{terminalinfo[0]['Tmname']}}</div>
+
 </body>
 </html>
