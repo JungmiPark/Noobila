@@ -20,40 +20,7 @@
             });
 
 			addMarkers(terminal, map);
-        //     var positions = [//다중 마커 저장 배열
-		// 	{
- 		// 		title: '창원역', 
- 		// 		lonlat: new Tmapv2.LatLng(35.25728935382537,128.60714256763458)//좌표 지정
- 		// 	},
- 		// 	{
- 		// 		title: '의창구청', 
- 		// 		lonlat: new Tmapv2.LatLng(35.253822182972065,128.63995671272278)
- 		// 	},
- 		// 	{
- 		// 		title: '창원병원', 
- 		// 		lonlat: new Tmapv2.LatLng(35.21752736106238,128.6712098121643)
- 		// 	},
- 		// 	{
- 		// 		title: '롯데백화점',
- 		// 		lonlat: new Tmapv2.LatLng(35.22427184170951,128.68097305297851)
- 		// 	},
- 		// 	{
-	    //  		title: '상남도서관',
-	    //  		lonlat: new Tmapv2.LatLng(35.2141833983877,128.69521021842956)
-	    //  	}
-		// ];
-		 
-		// for (var i = 0; i< positions.length; i++){//for문을 통하여 배열 안에 있는 값을 마커 생성
-		// 	var lonlat = positions[i].lonlat;
-		// 	var title = positions[i].title;
-		// 	//Marker 객체 생성.
-		// 	marker = new Tmapv2.Marker({
-		// 		position : lonlat, //Marker의 중심좌표 설정.
-		// 		map : map, //Marker가 표시될 Map 설정.
-		// 		title : title //Marker 타이틀.
-		// 	});
-		// }
-		
+
 	}
     // 마커들을 저장할 배열입니다.
 	var markers = [];
@@ -71,10 +38,34 @@
             var marker = new Tmapv2.Marker({
                 position: new Tmapv2.LatLng(lat, lng),//Marker의 중심좌표 설정.
 				// map: map, 
-                label: terminal[i]['Tmname'] //Marker의 라벨.
+                title: terminal[i]['Tmname'] //Marker의 라벨.
             });
             marker.setMap(map); //Marker가 표시될 Map 설정.
             markers.push(marker);
+			
+			//Marker에 마우스가 마커 영역에 들어왔을때 이벤트 등록.
+			marker.addListener("mouseenter", function(evt) {
+				var content ="<div style=' position: relative; border-bottom: 1px solid #dcdcdc; line-height: 18px; padding: 0 35px 2px 0;'>"+
+					"<div style='font-size: 12px; line-height: 15px;'>"+
+					"<span style='display: inline-block; width: 14px; height: 14px; background-image: url('http://tmapapi.sktelecom.com/resources/images/common/footer_logo.png'); vertical-align: middle; margin-right: 5px;'></span>{{terminalinfo[i]['Tmname']}}"+
+					"</div>"+
+					"</div>"+
+					"<div style='position: relative; padding-top: 5px; display:inline-block'>"+
+					//"<div style='display:inline-block; border:1px solid #dcdcdc;'><img src='http://tmapapi.sktelecom.com/resources/images/common/footer_logo.png' width='73' height='70'></div>"+
+					"<div style='display:inline-block; margin-left:5px; vertical-align: top;'>"+
+					"<span style='font-size: 12px; margin-left:2px; margin-bottom:2px; display:block;'>반납 가능 거치대 : {{terminal[i]['Emptycnt']}}</span>"+
+					"<span style='font-size: 12px; color:#888; margin-left:2px; margin-bottom:2px; display:block;'>대여 가능 거치대 : {{terminal[i]['Parkcnt']}}</span>"+
+					//"<span style='font-size: 12px; margin-left:2px;'><a href='https://openapi.sk.com/' target='blank'>개발자센터</a></span>"+
+					"</div>"+
+					"</div>";
+				//Popup 객체 생성.
+				infoWindow = new Tmapv2.InfoWindow({
+					position: new Tmapv2.LatLng(37.566481622437934,126.98502302169841), //Popup 이 표출될 맵 좌표
+					content: content, //Popup 표시될 text
+					type: 2, //Popup의 type 설정.
+					map: map //Popup이 표시될 맵 객체
+				});
+			});
         }
     }
 	 
